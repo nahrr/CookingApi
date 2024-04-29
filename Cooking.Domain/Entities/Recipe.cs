@@ -5,23 +5,15 @@ namespace Cooking.Domain.Entities;
 public sealed class Recipe : RecipeBase
 {
     private readonly List<Ingredient> _ingredients = [];
-    private readonly Dictionary<CookingStepNumber, CookingStep> _steps = new();
+    private readonly Dictionary<CookingStepNumber, CookingStep> _steps = [];
     public IReadOnlyList<Ingredient> Ingredients => _ingredients.AsReadOnly();
     public IReadOnlyDictionary<CookingStepNumber, CookingStep> Steps => _steps;
 
-    private Recipe()
+    private Recipe(string description) : base(Guid.NewGuid(), description)
     {
     }
 
-    public static Recipe Create(string description)
-    {
-        return new Recipe()
-        {
-            Id = Guid.NewGuid(),
-            Description = description,
-            CreatedDateUtc = DateTime.UtcNow
-        };
-    }
+    public static Recipe Create(string description) => new Recipe(description);
 
     public void AddIngredient(Ingredient ingredient)
     {
