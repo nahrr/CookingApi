@@ -19,6 +19,9 @@
 # Mono auto generated files
 mono_crash.*
 
+# Ignore development settings
+appsettings.Development.json
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -485,3 +488,5 @@ $RECYCLE.BIN/
 
 
 node_modules/
+
+

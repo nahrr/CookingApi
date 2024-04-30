@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Cooking.Application.Recipes.QueryHandlers;
 
-public sealed class GetRecipeHandler : IRequestHandler<GetRecipeByIdQuery, GetRecipeResponse>
+public sealed class GetRecipeQueryHandler : IRequestHandler<GetRecipeByIdQuery, GetRecipeResponse>
 {
     public async Task<GetRecipeResponse> Handle(GetRecipeByIdQuery request, CancellationToken cancellationToken)
     {

@@ -2,4 +2,4 @@
 
 namespace Cooking.Application.Recipes.Commands;
 
-public sealed record AddRecipeResponse(Guid Id, string Description);
+public sealed record AddRecipeResponse(Guid Id);

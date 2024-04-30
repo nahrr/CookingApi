@@ -34,10 +34,14 @@ public class RecipesController(
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateRecipe([FromBody] AddRecipeRequest recipe)
+    public async Task<IActionResult> CreateRecipe([FromBody] AddRecipeRequest request)
     {
-        var createdRecipe = await _sender.Send(new AddRecipeCommand(recipe));
+        var response = await _sender.Send(new AddRecipeCommand(
+            request.Name,
+            request.Description,
+            request.Ingredients,
+            request.Steps));
 
-        return CreatedAtAction(nameof(GetRecipe), new { id = createdRecipe.Id }, createdRecipe);
+        return CreatedAtAction(nameof(GetRecipe), new { id = response.Id }, response);
     }
 }

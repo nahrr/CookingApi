@@ -1,3 +1,3 @@
 namespace Cooking.Domain.ValueObjects;
 
-public sealed record Ingredient(string Name, double Quantity, string Measurement);
+public sealed record Ingredient(string Name, decimal Quantity, string Unit);

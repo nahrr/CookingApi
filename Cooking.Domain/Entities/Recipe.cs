@@ -9,11 +9,11 @@ public sealed class Recipe : RecipeBase
     public IReadOnlyList<Ingredient> Ingredients => _ingredients.AsReadOnly();
     public IReadOnlyDictionary<CookingStepNumber, CookingStep> Steps => _steps;
 
-    private Recipe(string description) : base(Guid.NewGuid(), description)
+    private Recipe(string name, string description) : base(Guid.NewGuid(), name, description)
     {
     }
 
-    public static Recipe Create(string description) => new Recipe(description);
+    public static Recipe Create(string name, string description) => new Recipe(name, description);
 
     public void AddIngredient(Ingredient ingredient)
     {
