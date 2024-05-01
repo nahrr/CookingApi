@@ -5,7 +5,8 @@ using MediatR;
 
 namespace Cooking.Application.Recipes.CommandHandlers;
 
-public sealed class AddRecipeCommandHandler : IRequestHandler<AddRecipeCommand, AddRecipeResponse>
+public sealed class AddRecipeCommandHandler(IRepository<RecipeDocument> repository)
+    : IRequestHandler<AddRecipeCommand, AddRecipeResponse>
 {
     public async Task<AddRecipeResponse> Handle(AddRecipeCommand request, CancellationToken cancellationToken)
     {
@@ -21,7 +22,14 @@ public sealed class AddRecipeCommandHandler : IRequestHandler<AddRecipeCommand, 
                     x.Instruction,
                     TimeSpan.FromMinutes(x.DurationInMinutes))));
 
-        await Task.Delay(TimeSpan.FromMilliseconds(0.2), cancellationToken);
+        //TODO: fix response
+        await repository.IndexAsync(new RecipeDocument
+        {
+            Id = recipe.Id,
+            Name = recipe.Name,
+            Description = recipe.Description,
+            Ingredients = recipe.Ingredients.ToList()
+        }, cancellationToken);
 
         return new AddRecipeResponse(recipe.Id);
     }
