@@ -26,26 +26,3 @@ public abstract class Repository<TDocument>(ElasticsearchClient elasticsearchCli
         var response = await elasticsearchClient.Indices.CreateAsync(descriptor, cancellationToken);
     }
 }
-
-public class RecipeRepository(ElasticsearchClient elasticsearchClient)
-    : Repository<RecipeDocument>(elasticsearchClient), IRepository<RecipeDocument>
-{
-    public new async Task IndexAsync(RecipeDocument document, CancellationToken cancellationToken)
-    {
-        await base.IndexAsync(document, cancellationToken);
-    }
-
-    public async Task CreateIndexAsync(CancellationToken cancellationToken)
-    {
-        var descriptor = new CreateIndexRequestDescriptor<RecipeDocument>(nameof(RecipeDocument))
-            .Mappings(m => m
-                .Properties(p => p
-                    .Keyword(f => f.Id)
-                    .Keyword(f => f.Name)
-                    .Text(f => f.Name)
-                    .Text(f => f.Description)
-                ));
-
-        await base.CreateIndexAsync(descriptor, cancellationToken);
-    }
-}
