@@ -1,4 +1,5 @@
 using Cooking.Domain.Entities;
+using Cooking.Infrastructure.Mappings;
 using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.IndexManagement;
 
@@ -16,7 +17,8 @@ public abstract class Repository<TDocument>(ElasticsearchClient elasticsearchCli
 
         //TODO: handle response
         var response =
-            await elasticsearchClient.IndexAsync(document, x => x.Id(document.Id), cancellationToken);
+            await elasticsearchClient.IndexAsync(document, document.Id,
+                x => x.Index(typeof(TDocument).Name.ToLower()), cancellationToken);
     }
 
     public async Task CreateIndexAsync(CreateIndexRequestDescriptor<TDocument> descriptor,

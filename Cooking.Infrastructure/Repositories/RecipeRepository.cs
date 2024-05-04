@@ -1,28 +1,43 @@
 using Cooking.Domain.Entities;
+using Cooking.Infrastructure.Mappings;
 using Elastic.Clients.Elasticsearch;
-using Elastic.Clients.Elasticsearch.IndexManagement;
 
 namespace Cooking.Infrastructure.Repositories;
 
 public sealed class RecipeRepository(ElasticsearchClient elasticsearchClient)
-    : Repository<RecipeDocument>(elasticsearchClient), IRepository<RecipeDocument>
+    : Repository<RecipeDocument>(elasticsearchClient), IRepository<Recipe>
 {
-    public new async Task IndexAsync(RecipeDocument document, CancellationToken cancellationToken)
+    public new async Task IndexAsync(Recipe recipe, CancellationToken cancellationToken)
     {
+        var document = new RecipeDocument
+        {
+            Id = recipe.Id,
+            Name = recipe.Name,
+            Description = recipe.Description,
+            Ingredients = recipe.Ingredients,
+            CookingSteps = recipe.Steps.Select(x => new CookingStepDto
+            {
+                StepNumber = x.Key.Step,
+                CookingStep = new CookingStep(x.Value.Instruction,
+                    x.Value.Duration)
+            }),
+            Complexity = recipe.Complexity,
+            TypeOfMeal = recipe.TypeOfMeal,
+            Cuisine = recipe.Cuisine,
+            CreatedDateUtc = recipe.CreatedDateUtc,
+            LastModifiedDateUtc = recipe.LastModifiedDateUtc
+        };
+
+        //TODO: tmp
+
+        await CreateIndexAsync(cancellationToken);
+        
         await base.IndexAsync(document, cancellationToken);
     }
 
     public async Task CreateIndexAsync(CancellationToken cancellationToken)
     {
-        var descriptor = new CreateIndexRequestDescriptor<RecipeDocument>(nameof(RecipeDocument))
-            .Mappings(m => m
-                .Properties(p => p
-                    .Keyword(f => f.Id)
-                    .Keyword(f => f.Name)
-                    .Text(f => f.Name)
-                    .Text(f => f.Description)
-                ));
-
+        var descriptor = RecipeDocumentMapping.Create();
         await base.CreateIndexAsync(descriptor, cancellationToken);
     }
 }

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cooking.Application\Cooking.Application.csproj" />
+    <ProjectReference Include="..\Cooking.Infrastructure\Cooking.Infrastructure.csproj" />
   </ItemGroup>
 
 

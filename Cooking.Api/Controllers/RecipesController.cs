@@ -40,7 +40,10 @@ public class RecipesController(
             request.Name,
             request.Description,
             request.Ingredients,
-            request.Steps));
+            request.Steps,
+            request.TypeOfMeal,
+            request.Complexity,
+            request.Cuisine));
 
         return CreatedAtAction(nameof(GetRecipe), new { id = response.Id }, response);
     }
