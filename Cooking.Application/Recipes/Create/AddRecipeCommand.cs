@@ -1,7 +1,7 @@
 ﻿using Cooking.Domain.Enums;
 using MediatR;
 
-namespace Cooking.Application.Recipes.Commands;
+namespace Cooking.Application.Recipes.Create;
 
 public sealed record AddRecipeCommand(
     string Name,

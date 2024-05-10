@@ -1,11 +1,8 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
+using Cooking.Api;
 using Cooking.Application;
 using Cooking.Infrastructure;
-using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +14,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();

@@ -11,18 +11,19 @@ public sealed class Recipe : RecipeBase
     public IReadOnlyDictionary<CookingStepNumber, CookingStep> Steps => _steps;
 
     private Recipe(
+        Guid id,
         string name,
         string description,
         Complexity complexity,
         TypeOfMeal typeOfMeal,
         Cuisine cuisine
-    ) : base(Guid.NewGuid(), name, description, complexity, typeOfMeal, cuisine)
+    ) : base(id, name, description, complexity, typeOfMeal, cuisine)
     {
     }
 
-    public static Recipe Create(string name, string description, Complexity complexity, TypeOfMeal typeOfMeal,
+    public static Recipe Create(Guid id, string name, string description, Complexity complexity, TypeOfMeal typeOfMeal,
         Cuisine cuisine) =>
-        new(name, description, complexity, typeOfMeal, cuisine);
+        new(id, name, description, complexity, typeOfMeal, cuisine);
 
     public void AddIngredient(Ingredient ingredient)
     {

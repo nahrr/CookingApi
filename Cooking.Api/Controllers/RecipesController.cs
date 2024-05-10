@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Cooking.Application.Recipes.Commands;
-using Cooking.Application.Recipes.Queries;
+using Cooking.Application.Recipes.Create;
+using Cooking.Application.Recipes.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

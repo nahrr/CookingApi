@@ -16,7 +16,7 @@ public class RecipeDocument : IMappingDocument
     public required TypeOfMeal TypeOfMeal { get; init; }
     public required Cuisine Cuisine { get; init; }
     public required DateTime CreatedDateUtc { get; init; }
-    public required DateTime? LastModifiedDateUtc { get; init; }
+    public  DateTime? LastModifiedDateUtc { get; init; }
 }
 
 public class CookingStepDto //TODO

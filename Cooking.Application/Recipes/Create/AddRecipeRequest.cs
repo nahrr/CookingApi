@@ -1,6 +1,6 @@
 ﻿using Cooking.Domain.Enums;
 
-namespace Cooking.Application.Recipes.Commands;
+namespace Cooking.Application.Recipes.Create;
 
 public sealed record AddRecipeRequest(
     string Name,

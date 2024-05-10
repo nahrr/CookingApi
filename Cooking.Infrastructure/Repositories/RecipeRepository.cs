@@ -7,8 +7,12 @@ namespace Cooking.Infrastructure.Repositories;
 public sealed class RecipeRepository(ElasticsearchClient elasticsearchClient)
     : Repository<RecipeDocument>(elasticsearchClient), IRepository<Recipe>
 {
-    public new async Task IndexAsync(Recipe recipe, CancellationToken cancellationToken)
+    private bool _isIndexCreated;
+
+    public async Task IndexAsync(Recipe recipe, CancellationToken cancellationToken)
     {
+        await EnsureIndexExistsAsync(cancellationToken);
+
         var document = new RecipeDocument
         {
             Id = recipe.Id,
@@ -28,16 +32,25 @@ public sealed class RecipeRepository(ElasticsearchClient elasticsearchClient)
             LastModifiedDateUtc = recipe.LastModifiedDateUtc
         };
 
-        //TODO: tmp
-
-        await CreateIndexAsync(cancellationToken);
-        
         await base.IndexAsync(document, cancellationToken);
     }
 
-    public async Task CreateIndexAsync(CancellationToken cancellationToken)
+    public new async Task<Recipe?> GetDocumentByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var descriptor = RecipeDocumentMapping.Create();
-        await base.CreateIndexAsync(descriptor, cancellationToken);
+        var recipeDocument = await base.GetDocumentByIdAsync(id, cancellationToken);
+
+        return recipeDocument?.ToDomainModel();
+    }
+
+    //TODO: Tmp solution
+    private async Task EnsureIndexExistsAsync(CancellationToken cancellationToken)
+    {
+        if (!_isIndexCreated)
+        {
+            var descriptor = RecipeDocumentMapping.Create();
+            await CreateIndexAsync(descriptor, cancellationToken);
+
+            _isIndexCreated = true;
+        }
     }
 }

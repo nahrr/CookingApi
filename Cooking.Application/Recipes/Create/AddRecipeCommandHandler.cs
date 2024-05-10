@@ -1,9 +1,8 @@
-﻿using Cooking.Application.Recipes.Commands;
-using Cooking.Domain.Entities;
+﻿using Cooking.Domain.Entities;
 using Cooking.Domain.ValueObjects;
 using MediatR;
 
-namespace Cooking.Application.Recipes.CommandHandlers;
+namespace Cooking.Application.Recipes.Create;
 
 public sealed class AddRecipeCommandHandler(IRepository<Recipe> repository)
     : IRequestHandler<AddRecipeCommand, AddRecipeResponse>
@@ -11,6 +10,7 @@ public sealed class AddRecipeCommandHandler(IRepository<Recipe> repository)
     public async Task<AddRecipeResponse> Handle(AddRecipeCommand request, CancellationToken cancellationToken)
     {
         var recipe = Recipe.Create(
+            Guid.NewGuid(),
             request.Name,
             request.Description,
             request.Complexity,

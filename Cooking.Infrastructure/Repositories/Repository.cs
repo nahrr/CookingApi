@@ -1,5 +1,4 @@
 using Cooking.Domain.Entities;
-using Cooking.Infrastructure.Mappings;
 using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.IndexManagement;
 
@@ -8,7 +7,9 @@ namespace Cooking.Infrastructure.Repositories;
 public abstract class Repository<TDocument>(ElasticsearchClient elasticsearchClient)
     where TDocument : IMappingDocument
 {
-    public async Task IndexAsync(TDocument document, CancellationToken cancellationToken)
+    private readonly string _indexName = typeof(TDocument).Name.ToLower();
+
+    protected async Task IndexAsync(TDocument document, CancellationToken cancellationToken)
     {
         if (document is null)
         {
@@ -18,10 +19,17 @@ public abstract class Repository<TDocument>(ElasticsearchClient elasticsearchCli
         //TODO: handle response
         var response =
             await elasticsearchClient.IndexAsync(document, document.Id,
-                x => x.Index(typeof(TDocument).Name.ToLower()), cancellationToken);
+                x => x.Index(_indexName), cancellationToken);
     }
 
-    public async Task CreateIndexAsync(CreateIndexRequestDescriptor<TDocument> descriptor,
+    protected async Task<TDocument?> GetDocumentByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var response = await elasticsearchClient.GetAsync<TDocument>(_indexName, id, cancellationToken);
+
+        return response.Source;
+    }
+
+    protected async Task CreateIndexAsync(CreateIndexRequestDescriptor<TDocument> descriptor,
         CancellationToken cancellationToken)
     {
         //TODO: handle response

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Cooking.Application.Recipes.Queries;
-using MediatR;
+﻿using MediatR;
 
-namespace Cooking.Application.Recipes.QueryHandlers;
+namespace Cooking.Application.Recipes.GetById;
 
 public sealed class GetRecipesHandler : IRequestHandler<GetRecipesQuery, IEnumerable<GetRecipeResponse>>
 {
@@ -14,9 +9,6 @@ public sealed class GetRecipesHandler : IRequestHandler<GetRecipesQuery, IEnumer
     {
         await Task.Delay(TimeSpan.FromMilliseconds(200), cancellationToken);
 
-        return new List<GetRecipeResponse>()
-        {
-            new(Guid.NewGuid(), "Test")
-        };
+        return new List<GetRecipeResponse>();
     }
 }
